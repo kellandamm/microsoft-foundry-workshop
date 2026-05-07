@@ -1,0 +1,36 @@
+# Environment / secrets
+.env
+*.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+npm-debug.log*
+.next/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json
+
+# Azure Developer CLI
+.azure/

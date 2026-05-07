@@ -1,0 +1,39 @@
+# agent.yaml — Microsoft Foundry Agent configuration (stack-agnostic skeleton)
+# Replace placeholder values with your own before running.
+
+name: "workshop-agent"
+description: "A workshop agent for the Microsoft Foundry 2-hour lab."
+
+# Model
+# Reference the model deployment name created in your Foundry project.
+model:
+  deployment: "${FOUNDRY_MODEL_DEPLOYMENT}"   # e.g. gpt-4o, gpt-4.1
+  parameters:
+    temperature: 0.7
+    max_tokens: 1024
+
+# Instructions
+# This is the system prompt that shapes the agent's persona and behaviour.
+instructions: |
+  You are a helpful assistant for the Microsoft Foundry workshop.
+  Answer questions clearly and concisely.
+  When you need to look up information or perform a calculation, use the tools provided.
+  If you are unsure, say so rather than guessing.
+
+# Tools
+# List tools the agent can call. Each tool must have a corresponding implementation
+# in agent/tools/. Remove or add entries as needed.
+tools:
+  - name: sample_tool
+    description: "A sample tool that demonstrates how to register and call a tool from this agent."
+    # parameters: define input schema for your tool here
+    # handler: reference to your tool implementation
+
+# Conversation
+conversation:
+  history_messages: 10   # number of prior turns to include in context
+
+# Notes
+# - Set FOUNDRY_PROJECT_CONNECTION and FOUNDRY_MODEL_DEPLOYMENT in your .env file.
+# - Never commit secrets or keys to this file.
+# - See agent/README.md for instructions on running and testing the agent.
