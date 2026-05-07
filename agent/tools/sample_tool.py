@@ -1,62 +1,64 @@
 #!/usr/bin/env python3
 """
-sample_tool.py — Example tool for the workshop agent.
+sample_tool.py — SOLUTION BRANCH
 
-This tool takes a topic string and returns a simple summary placeholder.
-Replace the implementation with any real logic: REST API call, DB lookup, calculation, etc.
+This version is ready to use with the FunctionTool SDK pattern.
+The get_topic_summary function has type hints and a docstring that the SDK
+uses to auto-generate the tool definition — no manual JSON schema needed.
 
-Registration:
-  In main_agent.py, import and pass this function definition to the agent's tools= list.
-  See: https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/function-calling
+See:
+  https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/function-calling
 """
 
 import json
 
 
 # ---------------------------------------------------------------------------
-# Tool definition (passed to the agent at creation time)
-# ---------------------------------------------------------------------------
-SAMPLE_TOOL_DEFINITION = {
-    "type": "function",
-    "function": {
-        "name": "get_topic_summary",
-        "description": "Returns a short summary for a given topic. Use this when the user asks about a specific subject.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "topic": {
-                    "type": "string",
-                    "description": "The topic to summarise, e.g. 'Microsoft Foundry', 'Azure AI Search'.",
-                }
-            },
-            "required": ["topic"],
-        },
-    },
-}
-
-
-# ---------------------------------------------------------------------------
-# Tool handler (called when the agent invokes this tool)
+# Tool handler
+# The SDK reads the docstring and type hints to build the tool definition.
 # ---------------------------------------------------------------------------
 def get_topic_summary(topic: str) -> str:
     """
-    Return a summary for the given topic.
-    Replace this stub with a real implementation.
+    Returns a short summary for a given topic.
+    Use this when the user asks about a specific subject or technology.
+
+    :param topic: The topic to summarise, e.g. 'Microsoft Foundry' or 'Azure AI Search'.
+    :type topic: str
+    :return: A JSON string with 'topic' and 'summary' fields.
+    :rtype: str
     """
-    # TODO: replace with a real lookup, API call, or RAG query
     summaries = {
-        "microsoft foundry": "Microsoft Foundry is an AI platform for building, deploying, and managing AI agents and models on Azure.",
-        "azure ai search": "Azure AI Search is a cloud search service with built-in AI capabilities for indexing and querying data.",
+        "microsoft foundry": (
+            "Microsoft Foundry is an AI platform on Azure for building, deploying, and managing "
+            "AI agents and models. It provides a hub-and-project model for organising resources, "
+            "model deployments, and agent configurations."
+        ),
+        "azure ai search": (
+            "Azure AI Search is a cloud search service with built-in AI capabilities for "
+            "indexing and querying structured and unstructured data at scale."
+        ),
+        "foundry agent service": (
+            "The Foundry Agent Service is a managed service that hosts and runs AI agents. "
+            "It handles conversation state, tool calling, and model orchestration."
+        ),
+        "semantic kernel": (
+            "Semantic Kernel is an open-source SDK from Microsoft that helps you integrate "
+            "AI models and plugins into your applications using .NET, Python, or Java."
+        ),
     }
-    result = summaries.get(topic.lower(), f"No summary available for '{topic}'. Add it to the tool!")
+    result = summaries.get(
+        topic.lower(),
+        f"No summary found for '{topic}'. Extend the summaries dict or connect a real data source."
+    )
     return json.dumps({"topic": topic, "summary": result})
 
 
 # ---------------------------------------------------------------------------
-# Tool dispatcher (called from the agent run loop when a tool call arrives)
+# Kept for backward compatibility with starter branch dispatcher pattern
 # ---------------------------------------------------------------------------
+SAMPLE_TOOL_DEFINITION = {}  # not needed when using FunctionTool SDK pattern
+
 def dispatch_tool_call(tool_name: str, tool_args: dict) -> str:
-    """Route a tool call by name to the correct handler."""
     if tool_name == "get_topic_summary":
         return get_topic_summary(**tool_args)
     raise ValueError(f"Unknown tool: {tool_name}")
